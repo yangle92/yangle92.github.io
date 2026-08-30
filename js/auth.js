@@ -172,10 +172,6 @@ const Auth = (() => {
         <div class="login-logo">🌈</div>
         <h2>快乐英语乐园</h2>
         <p class="login-sub">小学英语学习系统</p>
-        <div class="login-tabs">
-          <button type="button" class="login-tab active" data-mode="login">🔑 登录</button>
-          <button type="button" class="login-tab" data-mode="register">✨ 注册新账号</button>
-        </div>
         <form id="loginForm" autocomplete="off">
           <div class="login-field">
             <label for="loginUser">👤 账号名</label>
@@ -185,46 +181,25 @@ const Auth = (() => {
             <label for="loginPwd">🔒 密码</label>
             <input type="password" id="loginPwd" maxlength="32" placeholder="请输入密码" autocomplete="current-password">
           </div>
-          <div class="login-field" id="loginPwd2Field" style="display:none;">
-            <label for="loginPwd2">🔁 再输一遍密码</label>
-            <input type="password" id="loginPwd2" maxlength="32" placeholder="请重复密码" autocomplete="new-password">
-          </div>
           <div class="login-error" id="loginError"></div>
           <button type="submit" class="login-submit" id="loginSubmit">🔑 登 录</button>
         </form>
-        <p class="login-hint" id="loginHint">没有账号？点上方「✨ 注册新账号」自己注册一个</p>
+        <p class="login-hint" id="loginHint">需要账号请联系管理员添加：<a href="mailto:821428991@qq.com">821428991@qq.com</a></p>
       </div>
     `;
     document.body.appendChild(overlay);
 
-    let mode = 'login';
     const errEl = () => overlay.querySelector('#loginError');
     const submitBtn = overlay.querySelector('#loginSubmit');
-
-    overlay.querySelectorAll('.login-tab').forEach(tab => {
-      tab.addEventListener('click', () => {
-        mode = tab.dataset.mode;
-        overlay.querySelectorAll('.login-tab').forEach(t => t.classList.remove('active'));
-        tab.classList.add('active');
-        overlay.querySelector('#loginPwd2Field').style.display = mode === 'register' ? 'block' : 'none';
-        submitBtn.textContent = mode === 'register' ? '✨ 创建账号' : '🔑 登 录';
-        errEl().textContent = '';
-      });
-    });
 
     overlay.querySelector('#loginForm').addEventListener('submit', async (e) => {
       e.preventDefault();
       const user = overlay.querySelector('#loginUser').value.trim();
       const pwd = overlay.querySelector('#loginPwd').value;
-      const pwd2 = overlay.querySelector('#loginPwd2').value;
       errEl().textContent = '';
       submitBtn.disabled = true;
       try {
-        if (mode === 'register') {
-          await register(user, pwd, pwd2);
-        } else {
-          await login(user, pwd);
-        }
+        await login(user, pwd);
       } catch (err) {
         errEl().textContent = err.message || '操作失败，请重试';
       } finally {
@@ -248,7 +223,7 @@ const Auth = (() => {
     if (!pwd) throw new Error('请输入密码');
     // 用户名大小写不敏感
     const key = findKey(name);
-    if (!key) throw new Error('账号不存在，请先注册');
+    if (!key) throw new Error('账号不存在，请联系管理员添加');
     const u = getUsers()[key];
     if (!(await verifyPassword(pwd, u))) throw new Error('密码不正确，再想想？');
     setSession(key);

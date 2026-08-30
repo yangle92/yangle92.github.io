@@ -435,14 +435,6 @@ main { max-width: 1100px; margin: 24px auto 60px; padding: 0 20px; position: rel
 .login-logo { font-size: 56px; line-height: 1; margin-bottom: 8px; }
 .login-card h2 { font-size: 24px; font-weight: 800; }
 .login-sub { font-size: 13.5px; color: var(--text-soft); margin: 4px 0 18px; }
-.login-tabs { display: flex; gap: 8px; margin-bottom: 18px; }
-.login-tab {
-  flex: 1; border: none; background: #F1F1F4;
-  font-family: inherit; font-size: 14.5px; font-weight: 800;
-  color: var(--text-soft); padding: 10px 8px;
-  border-radius: 999px; cursor: pointer; transition: all 0.2s ease;
-}
-.login-tab.active { background: var(--blue); color: var(--white); box-shadow: var(--shadow); }
 .login-field { text-align: left; margin-bottom: 14px; }
 .login-field label { display: block; font-size: 13.5px; font-weight: 700; color: var(--text-soft); margin-bottom: 5px; }
 .login-field input {
@@ -471,6 +463,8 @@ main { max-width: 1100px; margin: 24px auto 60px; padding: 0 20px; position: rel
   background: var(--bg-soft); border-radius: 999px; padding: 6px 12px;
   display: inline-block;
 }
+.login-hint a { color: var(--blue); font-weight: 800; text-decoration: none; }
+.login-hint a:hover { text-decoration: underline; }
 @media (max-width: 480px) {
   .login-card { padding: 26px 20px 20px; }
   .login-card h2 { font-size: 21px; }

@@ -798,16 +798,24 @@ html[data-theme="dark"] .b3  { opacity: .16; }
 }
 .ghost-btn:hover { border-color: var(--primary); color: var(--primary); }
 /* 滚动区：宽屏下变成「正文 + 侧栏目录」双栏。
-   正文段落由 --read-measure 限宽以保证行宽舒适，而表格 / 代码块 / 图片 /
-   资料大纲不参与限宽，自动撑满可用宽度——长文居中好读，宽表格不憋屈 */
+   --read-measure 是整页唯一的「内容宽度」令牌（52rem ≈ 832px ≈ 中文 50 字/行），
+   挂在滚动区上供栅格与内容块共用 */
 .reader-scroll {
+  --read-measure: 52rem;
   flex: 1; overflow-y: auto;
   padding: clamp(26px, 3.2vw, 54px) clamp(22px, 3.6vw, 58px) 92px;
   display: grid; gap: 52px;
   grid-template-columns: minmax(0, 1fr);
   align-items: start;
 }
-.reader-content { min-width: 0; --read-measure: 52rem; }
+/* 只有一条内容轴：标题 / 段落 / 列表 / 表格 / 代码 / 图片 / 分隔线全部落在
+   同一个 --read-measure 宽度的块里，左右边缘严格对齐。
+   曾经的做法是「文字限宽居中、宽内容撑满」，结果表格左右各比正文多出 ~98px，
+   与标题、分隔线全都不共线 —— 视觉上就是「没对齐」。
+   真正需要更宽时由块内的横向滚动兜底（见 .md-table / pre），而不是放宽容器 */
+/* width:100% 不能省：栅格项一旦有 auto 横向外边距就不再 stretch，
+   会退化成 fit-content —— 资料浮层（无 max-width）当场缩成内容宽 393px */
+.reader-content { min-width: 0; width: 100%; max-width: var(--read-measure); margin-inline: auto; }
 
 .reader-head { padding-bottom: 24px; border-bottom: 1px solid var(--border); margin-bottom: 30px; }
 .reader-head h1 {
@@ -843,9 +851,14 @@ html[data-theme="dark"] .b3  { opacity: .16; }
   background: var(--primary-soft); font-weight: 700;
 }
 /* 双栏只在宽屏成立。这里必须一起放进媒体查询 ——
-   否则窄屏下目录被 display:none 后第二列仍在，正文会被压成一条窄柱 */
+   否则窄屏下目录被 display:none 后第二列仍在，正文会被压成一条窄柱。
+   正文列固定为 --read-measure 而不是 1fr：否则 1fr 会把浮层的剩余宽度全吃掉，
+   目录被推到最右侧、与正文之间裂开一大块空白；整体居中后目录紧贴正文 */
 @media (min-width: 1280px) {
-  .reader-scroll--toc { grid-template-columns: minmax(0, 1fr) 244px; }
+  .reader-scroll--toc {
+    grid-template-columns: minmax(0, var(--read-measure)) 244px;
+    justify-content: center;
+  }
   .reader-toc:not([hidden]) {
     display: block; position: sticky; top: 0;
     max-height: calc(100vh - 230px); overflow-y: auto;
@@ -902,8 +915,7 @@ html[data-theme="dark"] .markdown pre { background: #10121E; }
 }
 .markdown hr { margin: 2.4em 0; border: none; border-top: 1px solid var(--border); }
 .markdown img { border-radius: var(--r); box-shadow: var(--shadow); margin: 1.2em 0; }
-/* 表格撑满浮层可用宽度（不限 --read-measure），并用更大的内边距与字号
-   抵消拉宽后的松散感 */
+/* 表格撑满正文块宽度（= --read-measure），列多到放不下时由 .md-table 横向滚动 */
 .md-table { margin: 1.4em 0; overflow-x: auto; scrollbar-width: thin; }
 .markdown table {
   width: 100%; margin: 0; border-collapse: collapse;
@@ -917,32 +929,15 @@ html[data-theme="dark"] .markdown pre { background: #10121E; }
 .markdown tbody tr:nth-child(even) { background: var(--surface-2); }
 .md-empty { color: var(--text-faint); font-style: italic; }
 
-/* 行宽（measure）控制 —— 长文可读性的关键。
-   浮层加宽后若任正文铺满，中文会拉到 70 字以上一行，眼睛回扫吃力；
-   所以只给「文字类」元素限宽并居中（中文约 50 字 / 行），
-   而表格、代码块、图片、资料大纲不参与限宽，自动撑满可用宽度 ——
-   这正是原先「内容显示不充分」的地方 */
-.reader-content .markdown > p,
-.reader-content .markdown > ul,
-.reader-content .markdown > ol,
-.reader-content .markdown > blockquote,
-.reader-content .markdown > h1,
-.reader-content .markdown > h2,
-.reader-content .markdown > h3,
-.reader-content .markdown > h4,
-.reader-content .markdown > h5,
-.reader-content .markdown > h6,
-.reader-content .markdown > hr,
-.reader-head,
-.reader-foot {
-  max-width: var(--read-measure);
-  margin-left: auto; margin-right: auto;
-}
+/* 行宽（measure）不在这里逐元素限制，而是由 .reader-content 整体把住
+   （见上方「只有一条内容轴」）。逐元素限宽会让标题、分隔线、表格各持一种
+   宽度：文字居中 832 而表格撑满 1028，左右边缘互相错开。
+   新增块级元素时也不必再往白名单里补 —— 它们天然跟着内容块走 */
 
 /* ---------- 14b. 资料面板（阅读浮层里的附件） ---------- */
-/* 资料浮层没有正文段落，标题就不该跟着正文字宽收窄 ——
-   否则标题居中窄、下方资料卡撑满宽，左右对不齐 */
-.reader-content.is-file .reader-head { max-width: none; }
+/* 资料浮层没有正文段落，卡片越大越好，所以整体放开限宽；
+   标题与资料卡同宽（都在 .reader-content 里），左右自然对齐 */
+.reader-content.is-file { max-width: none; }
 
 .file-panel { display: flex; flex-direction: column; gap: 22px; }
 .file-brief {
@@ -1066,7 +1061,5 @@ html[data-theme="dark"] .markdown pre { background: #10121E; }
   .reader-panel { position: static; max-width: 100%; box-shadow: none; border-radius: 0; }
   .reader-scroll { display: block; overflow: visible; padding: 0; }
   .reader-toc { display: none !important; }
-  .reader-content .markdown > p, .reader-content .markdown > ul,
-  .reader-content .markdown > ol, .reader-content .markdown > blockquote,
-  .reader-head, .reader-foot { max-width: 100%; }
+  .reader-content { max-width: 100%; }
 }

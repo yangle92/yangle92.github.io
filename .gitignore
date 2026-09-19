@@ -4,6 +4,12 @@ data/*.json
 # ===== 工具与记忆目录（开发脚本 + 项目记忆，不公开）=====
 .workbuddy/
 
+# ===== EdgeOne 发布产物（由源文件生成的干净副本，不入库）=====
+dist/
+
+# ===== EdgeOne CLI 本地状态 =====
+.edgeone/
+
 # ===== 系统 / 编辑器临时文件 =====
 .DS_Store
 Thumbs.db

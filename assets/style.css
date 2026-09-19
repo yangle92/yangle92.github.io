@@ -456,6 +456,27 @@ html[data-theme="dark"] .b3  { opacity: .16; }
   border: 1px solid color-mix(in srgb, var(--primary) 24%, transparent);
 }
 
+/* 置顶文章：顶部色条 + 「置顶」徽标；先后顺序由 blog/index.json 决定 */
+.pin-badge {
+  display: inline-flex; align-items: center; gap: 4px; flex: none;
+  padding: 2.5px 8px; border-radius: 6px;
+  font-size: 10.5px; font-weight: 800; letter-spacing: .6px;
+  color: var(--up);
+  background: color-mix(in srgb, var(--up) 12%, transparent);
+  border: 1px solid color-mix(in srgb, var(--up) 28%, transparent);
+}
+.pin-badge svg { width: 11px; height: 11px; stroke: currentColor; fill: none; }
+.post-card--pinned {
+  position: relative; overflow: hidden;
+  border-color: color-mix(in srgb, var(--up) 26%, var(--border));
+}
+.post-card--pinned::before {
+  content: ''; position: absolute; left: 0; top: 0; right: 0; height: 3px;
+  background: linear-gradient(90deg, var(--up), var(--amber));
+}
+.post-card--pinned:hover { border-color: var(--up); }
+.post-card--pinned .post-card-top { flex-wrap: wrap; row-gap: 6px; }
+
 /* ---------- 9. 技术笔记索引 ---------- */
 .notes-grid {
   display: grid; gap: 16px;
@@ -640,6 +661,8 @@ html[data-theme="dark"] .b3  { opacity: .16; }
 }
 .reader-meta { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; font-size: 13px; color: var(--text-faint); }
 .reader-meta .post-tags { padding: 0; margin: 0; }
+.reader-meta .pin-badge { font-size: 11.5px; padding: 3px 10px; }
+.reader-meta .pin-badge svg { width: 12px; height: 12px; }
 .reader-foot { margin-top: 46px; padding-top: 26px; border-top: 1px solid var(--border); }
 
 /* ---------- 14. Markdown 排版 ---------- */

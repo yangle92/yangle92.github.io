@@ -1,6 +1,6 @@
 {
   "site": "Yangle",
-  "generated": "2026-09-19 11:51:28",
+  "generated": "2026-09-19 12:06:10",
   "source": "C:\\Users\\yangle\\Desktop\\BLog",
   "count": 5,
   "posts": [
@@ -15,7 +15,9 @@
       "summary": "博客正式上线。这里说明文章自动同步机制——把 Markdown 丢进本机 BLog 文件夹，运行一次同步脚本，就会出现在首页。",
       "readingMinutes": 2,
       "path": "blog/src/欢迎来到我的博客.md",
-      "source": "欢迎来到我的博客.md"
+      "source": "欢迎来到我的博客.md",
+      "pinned": true,
+      "pinOrder": 1
     },
     {
       "slug": "test",

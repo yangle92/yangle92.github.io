@@ -459,8 +459,22 @@
       '<path d="M4.5 19.5h15" fill="none" stroke-width="1.9" stroke-linecap="round"/>' +
     '</svg>';
 
+  // 置顶图钉
+  var PIN_SVG = '<svg viewBox="0 0 24 24" aria-hidden="true">' +
+      '<path d="M8.4 4.6h7.2l-1.1 5.1 2.6 2.5v1.4H6.9v-1.4l2.6-2.5z" fill="none" ' +
+        'stroke-width="1.6" stroke-linejoin="round"/>' +
+      '<path d="M12 13.6v5.8" fill="none" stroke-width="1.6" stroke-linecap="round"/>' +
+    '</svg>';
+
   // 资料卡片（BLog 里的 PPT / PDF / Word / Excel 等文档）
   function isFile(p) { return !!p && p.kind === 'file'; }
+
+  // 置顶徽标：文章与资料卡片共用（置顶关系在 blog/index.json 里已排好序）
+  function isPinned(p) { return !!(p && p.pinned); }
+
+  function pinBadge() {
+    return '<span class="pin-badge" title="置顶文章">' + PIN_SVG + '置顶</span>';
+  }
 
   function tagsHtml(tags) {
     if (!tags || !tags.length) return '';
@@ -481,15 +495,18 @@
     var style = 'animation-delay:' + Math.min(i * 45, 400) + 'ms';
     var head = '<span class="post-date">' + CAL_SVG + fmtDate(p.date) + '</span>' +
                '<span class="post-dot"></span>';
+    var pin = isPinned(p) ? pinBadge() : '';
+    var cls = 'post-card' + (isPinned(p) ? ' post-card--pinned' : '');
 
     if (isFile(p)) {
       var short = [];
       if (p.pageCount) short.push('共 ' + p.pageCount + ' 页');
       else if (p.fileLabel) short.push(p.fileLabel);
       if (p.fileSizeText) short.push(p.fileSizeText);
-      return '<a class="post-card post-card--file" href="#/post/' + encodeURIComponent(p.slug) +
+      return '<a class="' + cls + ' post-card--file" href="#/post/' +
+        encodeURIComponent(p.slug) +
         '" data-slug="' + esc(p.slug) + '" style="' + style + '">' +
-        '<span class="post-card-top">' + head +
+        '<span class="post-card-top">' + pin + head +
           '<span class="post-read">' + esc(short.join(' · ')) + '</span>' +
           '<span class="file-badge">' + esc(p.fileLabel || 'FILE') + '</span>' +
         '</span>' +
@@ -499,9 +516,9 @@
       '</a>';
     }
 
-    return '<a class="post-card" href="#/post/' + encodeURIComponent(p.slug) +
+    return '<a class="' + cls + '" href="#/post/' + encodeURIComponent(p.slug) +
       '" data-slug="' + esc(p.slug) + '" style="' + style + '">' +
-      '<span class="post-card-top">' + head +
+      '<span class="post-card-top">' + pin + head +
         '<span class="post-read">' + (p.readingMinutes || 1) + ' 分钟读完</span>' +
       '</span>' +
       '<h3>' + esc(p.title) + '</h3>' +
@@ -686,6 +703,7 @@
 
     $('#readerTitle').textContent = p.title;
     $('#readerMeta').innerHTML =
+      (isPinned(p) ? pinBadge() : '') +
       '<span class="post-date">' + fmtDate(p.date) + '</span>' +
       '<span class="post-dot"></span>' +
       '<span class="post-read">' +

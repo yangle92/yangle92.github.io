@@ -35,6 +35,9 @@
 
   --nav-h: 64px;
   --maxw:  1120px;
+  /* 全站卡片栅格的统一最小列宽：各区块共用同一个值，
+     同一视口下不会出现「这个区块 3 列 311px、那个区块 2 列 474px」的节奏错位 */
+  --card-min: 320px;
 
   --ease: cubic-bezier(.22,.61,.36,1);
   --ease-out: cubic-bezier(.16,1,.3,1);
@@ -86,6 +89,11 @@ code, pre { font-family: "JetBrains Mono", "SFMono-Regular", Consolas, "Liberati
 
 ::selection { background: var(--primary); color: #fff; }
 
+/* hidden 必须真的隐藏：UA 的 [hidden]{display:none} 特异性极低，
+   作者样式里的 display:flex（如 .loading）会把它盖掉，元素就永远显示。
+   这里统一兜一道，避免以后再踩。 */
+[hidden] { display: none !important; }
+
 /* 滚动条 */
 ::-webkit-scrollbar { width: 10px; height: 10px; }
 ::-webkit-scrollbar-track { background: transparent; }
@@ -96,6 +104,18 @@ code, pre { font-family: "JetBrains Mono", "SFMono-Regular", Consolas, "Liberati
 ::-webkit-scrollbar-thumb:hover { background: var(--text-faint); }
 
 /* ---------- 3. 导航 ---------- */
+/* 键盘 / 读屏用户跳过导航直达主内容：平时藏在视口上方，聚焦时滑出 */
+.skip-link {
+  position: fixed; left: 50%; top: 8px; z-index: 100;
+  transform: translate(-50%, -180%);
+  padding: 10px 20px; border-radius: 99px;
+  background: var(--primary); color: #fff;
+  font-size: 13.5px; font-weight: 700;
+  box-shadow: var(--glow);
+  transition: transform .22s var(--ease-out);
+}
+.skip-link:focus { transform: translate(-50%, 0); }
+
 .nav {
   position: fixed; inset: 0 0 auto 0; height: var(--nav-h); z-index: 60;
   background: color-mix(in srgb, var(--bg) 72%, transparent);
@@ -228,9 +248,12 @@ html[data-theme="dark"] .b3  { opacity: .16; }
 .hero-desc {
   margin: 0 auto 32px; max-width: 620px; font-size: 15.5px;
   color: var(--text-soft);
+  /* 居中排版的段落用平衡断行：避免末行只剩「应用。」这类两三个字的孤字行 */
+  text-wrap: balance;
   animation: rise .8s .14s var(--ease-out) both;
 }
-.hero-desc b { color: var(--text); font-weight: 700; }
+/* 技术方向不被断行拆开（如「自动化与监控」被折成「自动化与监」/「控」） */
+.hero-desc b { color: var(--text); font-weight: 700; white-space: nowrap; }
 @keyframes rise {
   from { opacity: 0; transform: translateY(18px); }
   to   { opacity: 1; transform: none; }
@@ -358,7 +381,7 @@ html[data-theme="dark"] .b3  { opacity: .16; }
 /* ---------- 7. 在线应用卡片 ---------- */
 .app-grid {
   display: grid; gap: 18px;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(var(--card-min), 1fr));
 }
 .app-card {
   position: relative; overflow: hidden;
@@ -410,7 +433,7 @@ html[data-theme="dark"] .b3  { opacity: .16; }
 /* ---------- 7.5 AI 实践技术栈 ---------- */
 .ai-tracks {
   display: grid; gap: 16px;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(var(--card-min), 1fr));
 }
 .ai-track {
   position: relative; overflow: hidden;
@@ -503,8 +526,11 @@ html[data-theme="dark"] .b3  { opacity: .16; }
 /* ---------- 8. 博客卡片 ---------- */
 .blog-grid {
   display: grid; gap: 18px;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(var(--card-min), 1fr));
 }
+/* 文章数满足「3 列会空出 2 格、2 列正好排满」（4 / 10 / 16…）时改两列，
+   避免末行只挂一张卡、右侧空出约 2/3 行的空白。类名由 initBlog() 按当前列表长度挂上 */
+.blog-grid--duo { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 .post-card {
   display: flex; flex-direction: column; gap: 10px;
   padding: 22px; border-radius: var(--r-lg);
@@ -573,7 +599,7 @@ html[data-theme="dark"] .b3  { opacity: .16; }
 /* ---------- 9. 技术笔记索引 ---------- */
 .notes-grid {
   display: grid; gap: 16px;
-  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(var(--card-min), 1fr));
 }
 .note-cat {
   border-radius: var(--r-lg); overflow: hidden;
@@ -873,8 +899,11 @@ html[data-theme="dark"] .markdown pre { background: #10121E; }
 }
 
 /* ---------- 15. 响应式 ---------- */
-@media (max-width: 1000px) {
+@media (max-width: 1101px) {
   /* 两列：四张卡按 2×2 排满，避免出现"半行空洞"。
+     断点取 1101 而不是 1000 —— 容器要 1054px 以上三列才排得下每张 340px 的信息卡，
+     低于此宽度还硬排三列会把卡片压到 311px（比全站最小列宽还窄），
+     与同屏的两列博客 / 笔记区形成节奏错位。
      联系条回到普通格子，内部三格收窄（只留平台名），
      高度贴近同排的信息卡，不再拖出一条空白 */
   .about-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -885,8 +914,20 @@ html[data-theme="dark"] .markdown pre { background: #10121E; }
   .ql-txt i { display: none; }
 }
 @media (max-width: 860px) {
-  .nav-links { display: none; }
-  .nav-inner { gap: 12px; }
+  /* 手机上不再把导航整块隐藏（那样页面上就没有任何区块跳转入口了），
+     改成可横向滑动的胶囊条；容器占满余下宽度，右侧渐隐提示还能继续滑 */
+  .nav-inner { gap: 10px; padding: 0 16px; }
+  .nav-links {
+    flex: 1 1 auto; min-width: 0; margin-left: 10px;
+    flex-wrap: nowrap; gap: 2px;
+    overflow-x: auto; overscroll-behavior-x: contain;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none; -ms-overflow-style: none;
+    mask-image: linear-gradient(90deg, #000 0, #000 calc(100% - 18px), transparent 100%);
+    -webkit-mask-image: linear-gradient(90deg, #000 0, #000 calc(100% - 18px), transparent 100%);
+  }
+  .nav-links::-webkit-scrollbar { display: none; }
+  .nav-links a { flex: none; padding: 7px 12px; font-size: 13px; }
   .section { padding: 56px 20px; }
   .hero { padding: calc(var(--nav-h) + 52px) 20px 76px; }
   .stats li { min-width: 92px; padding: 0 14px; }

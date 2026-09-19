@@ -548,6 +548,9 @@
         return (p.title + ' ' + (p.summary || '') + ' ' + (p.tags || []).join(' '))
           .toLowerCase().indexOf(kw) > -1;
       });
+      // 3 列时末行只剩 1 张会空出 2 个卡位；当换成 2 列正好排满时（4 / 10 / 16… 篇）改两列
+      var duo = list.length >= 4 && list.length % 3 === 1 && list.length % 2 === 0;
+      grid.classList.toggle('blog-grid--duo', duo);
       grid.innerHTML = list.map(postCardHtml).join('');
       empty.hidden = list.length > 0;
       if (emptyText && POSTS.length && !list.length) {
@@ -591,8 +594,8 @@
           });
         chips.innerHTML = tags;
 
-        grid.innerHTML = POSTS.map(postCardHtml).join('');
-        empty.hidden = POSTS.length > 0;
+        // 交给 apply()：它会按当前筛选结果渲染卡片，并顺带决定列数（blog-grid--duo）
+        apply();
 
         var sp = $('[data-stat="posts"]');
         if (sp) { if (POSTS.length) animateNum(sp, POSTS.length); else sp.textContent = '0'; }

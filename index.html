@@ -3,13 +3,15 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="description" content="Yangle 的个人主页 —— 运维 / 云原生 / 自动化技术笔记索引、AI 实践技术栈，以及在线小应用。">
+<meta name="description" content="Yangle 的个人主页 —— 十余年 IT 基础架构经验沉淀：Linux、云原生、数据库、自动化与监控技术笔记，AI 实践方向，以及自研在线应用。">
 <meta name="theme-color" content="#5B5BD6">
 <title>Yangle · 技术笔记、AI 实践与在线应用</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='24' fill='%235B5BD6'/%3E%3Ctext x='50' y='70' font-size='58' font-family='sans-serif' font-weight='bold' fill='white' text-anchor='middle'%3EY%3C/text%3E%3C/svg%3E">
 <link rel="stylesheet" href="assets/style.css">
 </head>
 <body>
+
+<a class="skip-link" href="#top">跳到主要内容</a>
 
 <!-- ============ 顶部导航 ============ -->
 <header class="nav" id="nav">
@@ -51,12 +53,9 @@
         <i class="ring"></i>
       </div>
       <h1>Hi，我是 <em>Yangle</em></h1>
-      <p class="tagline">十年一线 IT 基础架构 · 把踩过的坑写成笔记</p>
-      <p class="hero-desc">
-        这里汇总了我历年的技术沉淀：<b>Linux 系统</b>、<b>云原生</b>、<b>数据库</b>、
-        <b>自动化与监控</b>，现在又多了一条 <b>AI 实践</b> 主线，以及我自己写的小应用。
-        持续更新，欢迎自取。
-      </p>
+      <p class="tagline">十余年 IT 基础架构 · 技术实践与经验沉淀</p>
+      <!-- 注意：技术方向之间不能有源码换行 —— 换行会在中文里渲染成空格，出现「云原生、 数据库」这种缝隙 -->
+      <p class="hero-desc">长期从事 IT 基础架构相关工作，技术方向覆盖 <b>Linux 系统</b>、<b>云原生</b>、<b>数据库</b>、<b>自动化与监控</b>，并已延伸至 <b>AI 实践</b> 领域。本站收录历年技术笔记、实践文档与自研在线应用。</p>
       <div class="hero-actions">
         <a class="btn btn-primary" href="#blog">
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16v14H4z" fill="none" stroke-width="1.8"/><path d="M8 9h8M8 13h5" stroke-width="1.8" stroke-linecap="round"/></svg>
@@ -81,7 +80,7 @@
   <section class="section" id="apps">
     <div class="sec-head">
       <h2 class="sec-title"><span class="dot"></span>在线应用</h2>
-      <p class="sec-note">自己动手写的小工具，打开即用</p>
+      <p class="sec-note">自研在线工具，无需安装，打开即用</p>
     </div>
     <div class="app-grid">
       <a class="app-card" href="english/">
@@ -100,8 +99,8 @@
       </a>
       <div class="app-card app-card--more">
         <div class="app-card-top"><span class="app-icon" style="--c1:#94A3B8;--c2:#CBD5E1">＋</span></div>
-        <h3>敬请期待</h3>
-        <p>这里还会放更多自研小应用。有想法欢迎邮件告诉我。</p>
+        <h3>更多应用</h3>
+        <p>后续将持续补充自研在线工具与实践项目，敬请关注。</p>
       </div>
     </div>
   </section>
@@ -110,7 +109,7 @@
   <section class="section" id="ai">
     <div class="sec-head">
       <h2 class="sec-title"><span class="dot"></span>AI 实践</h2>
-      <p class="sec-note" id="aiNote">技术栈新增方向 · 边学边做，产出都沉淀在本站</p>
+      <p class="sec-note" id="aiNote">技术栈方向 · 学习与工程实践并重，成果沉淀于本站</p>
     </div>
 
     <div class="ai-tracks" id="aiTracks"></div>
@@ -133,7 +132,7 @@
   <section class="section" id="blog">
     <div class="sec-head">
       <h2 class="sec-title"><span class="dot"></span>博客文章</h2>
-      <p class="sec-note">自动读取本地 <code>BLog</code> 文件夹，写完同步即上线</p>
+      <p class="sec-note">内容由本地 <code>BLog</code> 目录自动同步发布</p>
     </div>
 
     <div class="toolbar">
@@ -149,7 +148,7 @@
     <div class="empty" id="blogEmpty" hidden>
       <span class="empty-ico">📭</span>
       <b>还没有匹配的文章</b>
-      <p id="blogEmptyText">把写好 Markdown 放进电脑上的 <code>BLog</code> 文件夹，运行一次同步脚本即可自动出现在这里。</p>
+      <p id="blogEmptyText">把写好的 Markdown 放入电脑上的 <code>BLog</code> 目录，运行一次同步脚本即可自动出现在这里。</p>
     </div>
     <div class="loading" id="blogLoading" hidden><span></span><span></span><span></span></div>
     <noscript>
@@ -165,7 +164,7 @@
   <section class="section" id="notes">
     <div class="sec-head">
       <h2 class="sec-title"><span class="dot"></span>技术笔记索引</h2>
-      <p class="sec-note">历史沉淀 · 按主题分类，点击直达原文</p>
+      <p class="sec-note">多年技术笔记 · 按主题分类，点击展开</p>
     </div>
 
     <div class="toolbar">
@@ -180,7 +179,7 @@
     <div class="empty" id="notesEmpty" hidden>
       <span class="empty-ico">🔍</span>
       <b>没有找到匹配的笔记</b>
-      <p>换个关键词试试，或点上面的分类标签查看全部。</p>
+      <p>请更换关键词，或点选上方的分类标签查看全部。</p>
     </div>
     <noscript>
       <div class="empty">
@@ -234,7 +233,7 @@
 <footer class="footer">
   <div class="footer-inner">
     <p>© <span id="year">2026</span> Yangle · 用 HTML &amp; CSS 手写，托管于 GitHub Pages</p>
-    <p class="footer-sub">本站所有笔记均为个人学习记录，欢迎交流指正。</p>
+    <p class="footer-sub">本站内容均为个人技术学习记录，欢迎交流指正。</p>
   </div>
 </footer>
 

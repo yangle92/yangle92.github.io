@@ -14,3 +14,7 @@ dist/
 .DS_Store
 Thumbs.db
 *.swp
+
+# ===== Python 字节码缓存（会导致同步脚本的「工作区干净」检查失败）=====
+__pycache__/
+*.pyc

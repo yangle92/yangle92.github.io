@@ -1,8 +1,8 @@
 {
   "site": "Yangle",
-  "generated": "2026-09-19 11:15:53",
+  "generated": "2026-09-19 11:51:28",
   "source": "C:\\Users\\yangle\\Desktop\\BLog",
-  "count": 3,
+  "count": 5,
   "posts": [
     {
       "slug": "欢迎来到我的博客",
@@ -28,6 +28,55 @@
       "readingMinutes": 1,
       "path": "blog/src/test.md",
       "source": "test.md"
+    },
+    {
+      "slug": "AI大模型应用开发实战路标",
+      "title": "AI大模型应用开发实战路标",
+      "date": "2026-09-19",
+      "tags": [
+        "资料"
+      ],
+      "summary": "Excel 表格。含 3 个工作表。点击查看要点大纲并下载。",
+      "readingMinutes": 0,
+      "path": "blog/src/AI大模型应用开发实战路标.xlsx",
+      "source": "AI大模型应用开发实战路标.xlsx",
+      "kind": "file",
+      "fileLabel": "XLSX",
+      "fileKind": "Excel 表格",
+      "fileName": "AI大模型应用开发实战路标.xlsx",
+      "fileSize": 28376,
+      "fileSizeText": "27.7 KB",
+      "pageCount": null,
+      "outlineLabel": "工作表",
+      "outline": [
+        {
+          "n": 1,
+          "text": "Sheet1"
+        },
+        {
+          "n": 2,
+          "text": "Sheet2"
+        },
+        {
+          "n": 3,
+          "text": "Sheet3"
+        }
+      ]
+    },
+    {
+      "slug": "AI大模型应用开发实战路标-完整课纲解读",
+      "title": "AI 大模型应用开发实战路标：7 大模块 41 节课的完整课纲解读",
+      "date": "2026-09-19",
+      "tags": [
+        "AI大模型",
+        "学习路线",
+        "Agent",
+        "RAG"
+      ],
+      "summary": "把一份课程课纲拆成一张学习地图——7 大模块 41 节课，从提示工程与 RAG 基础，到 Agent、部署与高并发、开发框架、微调蒸馏，再到 AI Coding 的范式变革，附 8 个实战项目和 58 道面试题。",
+      "readingMinutes": 15,
+      "path": "blog/src/AI大模型应用开发实战路标-完整课纲解读.md",
+      "source": "AI大模型应用开发实战路标-完整课纲解读.md"
     },
     {
       "slug": "四年级知识强化培训",

@@ -534,7 +534,7 @@
     var empty = $('#blogEmpty');
     var emptyText = $('#blogEmptyText');
     var loading = $('#blogLoading');
-    if (!grid) return;
+    if (!grid) return Promise.resolve();
     // 加载动画默认隐藏（无 JS 时不会一直转），由脚本在开始拉取时显示
     if (loading) loading.hidden = false;
 
@@ -571,7 +571,7 @@
       });
     }
 
-    fetch('blog/index.json?t=' + Date.now(), { cache: 'no-store' })
+    var done = fetch('blog/index.json?t=' + Date.now(), { cache: 'no-store' })
       .then(function (r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
       .then(function (data) {
         POSTS = (data && data.posts) || [];
@@ -612,6 +612,100 @@
       if (!card) return;
       openPost(card.dataset.slug);
     });
+
+    // 返回 Promise：boot 里等清单加载完再渲染 AI 实践的「实践产出」
+    return done;
+  }
+
+  /* ============================================================
+     6.5 AI 实践（技术栈里的 AI 主线）
+     方向卡来自 window.AI_DATA；「实践产出」直接从博客清单里挑，
+     所以以后把新文章打上 AI 相关标签，这里会自动出现，不用改代码。
+     ============================================================ */
+  var LEVEL_CLASS = {
+    '已落地': 'live',
+    '实践中': 'doing',
+    '学习中': 'learning',
+    '规划中': 'todo'
+  };
+
+  function aiTrackHtml(t, i) {
+    var levels = (window.AI_DATA && window.AI_DATA.levels) || {};
+    var power = levels[t.level] || 1;
+    var seg = [];
+    for (var s = 1; s <= 5; s++) {
+      seg.push(s <= power ? '<i class="on"></i>' : '<i></i>');
+    }
+    var tools = (t.tools || []).map(function (x) {
+      return '<span>' + esc(x) + '</span>';
+    }).join('');
+    return '<article class="ai-track ai-track--' + (LEVEL_CLASS[t.level] || 'todo') +
+      '" style="animation-delay:' + Math.min(i * 45, 360) + 'ms">' +
+      '<div class="ai-track-top">' +
+        '<span class="ai-ico">' + (t.icon || '🤖') + '</span>' +
+        '<span class="ai-level">' + esc(t.level || '') + '</span>' +
+      '</div>' +
+      '<h3>' + esc(t.name) + '</h3>' +
+      '<p>' + esc(t.desc) + '</p>' +
+      '<div class="ai-meter" title="' + esc(t.level || '') + '">' + seg.join('') + '</div>' +
+      '<div class="ai-tools">' + tools + '</div>' +
+    '</article>';
+  }
+
+  function aiOutputHtml(list) {
+    return list.map(function (p) {
+      var file = isFile(p);
+      var kind = file ? (p.fileLabel || 'FILE') : '文章';
+      var meta = file
+        ? [p.fileKind || '资料', p.fileSizeText].filter(Boolean).join(' · ')
+        : ((p.readingMinutes || 1) + ' 分钟读完');
+      return '<a class="ai-out" href="#/post/' + encodeURIComponent(p.slug) + '">' +
+        '<span class="ai-out-kind' + (file ? ' ai-out-kind--file' : '') + '">' +
+          esc(kind) + '</span>' +
+        '<span class="ai-out-txt"><b>' + esc(p.title) + '</b><i>' + esc(meta) + '</i></span>' +
+        '<svg class="ai-out-arrow" viewBox="0 0 24 24" aria-hidden="true">' +
+          '<path d="M5 12h13M12.5 5.5 19 12l-6.5 6.5" fill="none" stroke-width="1.9" ' +
+          'stroke-linecap="round" stroke-linejoin="round"/></svg>' +
+      '</a>';
+    }).join('');
+  }
+
+  function initAI() {
+    var data = window.AI_DATA;
+    var box = $('#aiTracks');
+    if (!data || !box) return;
+
+    var tracks = data.tracks || [];
+    box.innerHTML = tracks.map(aiTrackHtml).join('');
+
+    // 实践产出：标签命中或标题命中 AI 关键词；文章在前、资料在后，各自按日期倒序
+    var re = new RegExp(data.matchRe || 'AI', 'i');
+    var tags = data.matchTags || [];
+    var list = POSTS.filter(function (p) {
+      var hit = (p.tags || []).some(function (t) { return tags.indexOf(t) > -1; });
+      if (!hit) hit = re.test(p.title + ' ' + p.slug);
+      return hit;
+    }).sort(function (a, b) {
+      var af = isFile(a) ? 1 : 0, bf = isFile(b) ? 1 : 0;
+      if (af !== bf) return af - bf;              // 文章在前，资料在后
+      var at = a.date || '', bt = b.date || '';
+      if (at !== bt) return at < bt ? 1 : -1;     // 各自按日期倒序
+      return 0;                                   // 同日保持清单原序（稳定排序）
+    });
+
+    var out = $('#aiOutput'), listBox = $('#aiOutputList');
+    if (out && listBox && list.length) {
+      listBox.innerHTML = aiOutputHtml(list);
+      out.hidden = false;
+    }
+
+    var note = $('#aiNote');
+    if (note) {
+      var live = tracks.filter(function (t) { return t.level === '已落地'; }).length;
+      note.innerHTML = '技术栈新增方向 · 共 <b>' + tracks.length + '</b> 个方向' +
+        '（已落地 ' + live + '）' +
+        (list.length ? ' · 站内产出 <b>' + list.length + '</b> 份' : '');
+    }
   }
 
   /* ============================================================
@@ -815,9 +909,10 @@
     initTheme();
     initNav();
     initNotes();
-    initBlog();
     initReader();
     initHover();
+    // AI 实践的「实践产出」取自博客清单，等清单加载完再渲染
+    initBlog().then(initAI);
   }
 
   if (document.readyState === 'loading') {

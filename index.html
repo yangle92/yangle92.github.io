@@ -3,9 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="description" content="Yangle 的个人主页 —— 运维 / 云原生 / 自动化技术笔记索引，以及在线小应用。">
+<meta name="description" content="Yangle 的个人主页 —— 运维 / 云原生 / 自动化技术笔记索引、AI 实践技术栈，以及在线小应用。">
 <meta name="theme-color" content="#5B5BD6">
-<title>Yangle · 技术笔记与在线应用</title>
+<title>Yangle · 技术笔记、AI 实践与在线应用</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='24' fill='%235B5BD6'/%3E%3Ctext x='50' y='70' font-size='58' font-family='sans-serif' font-weight='bold' fill='white' text-anchor='middle'%3EY%3C/text%3E%3C/svg%3E">
 <link rel="stylesheet" href="assets/style.css">
 </head>
@@ -18,11 +18,12 @@
       <span class="brand-mark">Y</span>
       <span class="brand-text">
         <b>Yangle</b>
-        <i>运维 · 云原生 · 自动化</i>
+        <i>运维 · 云原生 · AI 实践</i>
       </span>
     </a>
     <nav class="nav-links">
       <a href="#apps">在线应用</a>
+      <a href="#ai">AI 实践</a>
       <a href="#blog">博客</a>
       <a href="#notes">技术索引</a>
       <a href="#about">关于</a>
@@ -53,7 +54,8 @@
       <p class="tagline">十年一线 IT 基础架构 · 把踩过的坑写成笔记</p>
       <p class="hero-desc">
         这里汇总了我历年的技术沉淀：<b>Linux 系统</b>、<b>云原生</b>、<b>数据库</b>、
-        <b>自动化与监控</b>，以及我自己写的小应用。持续更新，欢迎自取。
+        <b>自动化与监控</b>，现在又多了一条 <b>AI 实践</b> 主线，以及我自己写的小应用。
+        持续更新，欢迎自取。
       </p>
       <div class="hero-actions">
         <a class="btn btn-primary" href="#blog">
@@ -102,6 +104,29 @@
         <p>这里还会放更多自研小应用。有想法欢迎邮件告诉我。</p>
       </div>
     </div>
+  </section>
+
+  <!-- ============ AI 实践（写进技术栈的 AI 主线） ============ -->
+  <section class="section" id="ai">
+    <div class="sec-head">
+      <h2 class="sec-title"><span class="dot"></span>AI 实践</h2>
+      <p class="sec-note" id="aiNote">技术栈新增方向 · 边学边做，产出都沉淀在本站</p>
+    </div>
+
+    <div class="ai-tracks" id="aiTracks"></div>
+
+    <div class="ai-output" id="aiOutput" hidden>
+      <h3 class="ai-output-title">实践产出</h3>
+      <div class="ai-output-list" id="aiOutputList"></div>
+    </div>
+
+    <noscript>
+      <div class="empty">
+        <span class="empty-ico">⚠️</span>
+        <b>浏览器禁用了 JavaScript</b>
+        <p>AI 实践方向与实践产出由脚本渲染，请在浏览器设置中开启 JavaScript 后刷新。</p>
+      </div>
+    </noscript>
   </section>
 
   <!-- ============ 博客（自动同步） ============ -->
@@ -175,6 +200,10 @@
       <div class="about-card">
         <h3>技术领域</h3>
         <p>操作系统与内核、云原生（K8s / Docker）、网络与负载均衡、数据库（MySQL / Redis / Oracle）、自动化（Ansible / SaltStack）、监控（Prometheus / Zabbix）、Python 开发。</p>
+      </div>
+      <div class="about-card">
+        <h3>AI 实践</h3>
+        <p>大模型 API 接入与 Prompt 工程、RAG 知识库、Agent 与 MCP 工具调用、本地模型部署（Ollama / vLLM），以及把 AI 工程化地接进日常运维流程。方向与实践产出见上方 <a href="#ai">AI 实践</a> 区块。</p>
       </div>
       <div class="about-card">
         <h3>通用能力</h3>

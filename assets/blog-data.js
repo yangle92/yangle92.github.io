@@ -1,6 +1,7 @@
 /* ============================================================
-   技术笔记索引数据
-   —— 由原 index.md 的分类链接目录整理而成（共 64 条）
+   静态数据（两个全局变量，均由 app.js 渲染）
+     · NOTE_DATA —— 技术笔记索引：历史沉淀的分类链接目录
+     · AI_DATA   —— AI 实践技术栈：能力方向 + 产出匹配规则
    如需增删，直接改这里即可。
    ============================================================ */
 window.NOTE_DATA = [
@@ -137,5 +138,105 @@ window.NOTE_DATA = [
         ]
       }
     ]
+  },
+  {
+    group: 'AI 实践',
+    cats: [
+      {
+        name: '模型与平台', icon: '🧠',
+        links: [
+          { t: 'DeepSeek 开放平台 · API 文档', u: 'https://api-docs.deepseek.com/zh-cn/' },
+          { t: '阿里云百炼（通义千问）文档', u: 'https://help.aliyun.com/zh/model-studio/' },
+          { t: '腾讯混元大模型文档', u: 'https://cloud.tencent.com/document/product/1729' },
+          { t: '智谱 GLM 开放平台文档', u: 'https://docs.bigmodel.cn/' },
+          { t: 'Qwen 官方文档', u: 'https://qwen.readthedocs.io/' }
+        ]
+      },
+      {
+        name: 'Prompt 工程', icon: '✍️',
+        links: [
+          { t: '提示工程指南（中文版）', u: 'https://www.promptingguide.ai/zh' },
+          { t: 'Anthropic · 提示工程总览', u: 'https://docs.anthropic.com/en/docs/build-with-claude/prompt-engineering/overview' }
+        ]
+      },
+      {
+        name: 'RAG 与知识库', icon: '📚',
+        links: [
+          { t: 'LangChain 官方文档', u: 'https://python.langchain.com/docs/introduction/' },
+          { t: 'LlamaIndex 官方文档', u: 'https://docs.llamaindex.ai/en/stable/' },
+          { t: 'Chroma 向量数据库', u: 'https://docs.trychroma.com/' },
+          { t: 'FastGPT 知识库问答', u: 'https://doc.tryfastgpt.ai/' },
+          { t: '检索增强生成（RAG）综述论文', u: 'https://arxiv.org/abs/2312.10997' }
+        ]
+      },
+      {
+        name: 'Agent 与工具调用', icon: '🕹️',
+        links: [
+          { t: 'MCP · 模型上下文协议', u: 'https://modelcontextprotocol.io/introduction' },
+          { t: 'LangGraph 智能体编排', u: 'https://langchain-ai.github.io/langgraph/' },
+          { t: 'Dify 应用编排平台', u: 'https://docs.dify.ai/zh-hans' },
+          { t: '扣子 Coze 开放文档', u: 'https://www.coze.cn/open/docs' }
+        ]
+      },
+      {
+        name: '部署与推理', icon: '🚀',
+        links: [
+          { t: 'Ollama 本地大模型运行', u: 'https://ollama.com/' },
+          { t: 'Ollama 模型库', u: 'https://ollama.com/library' },
+          { t: 'vLLM 高吞吐推理引擎', u: 'https://docs.vllm.ai/en/latest/' }
+        ]
+      },
+      {
+        name: '学习路线', icon: '🎯',
+        links: [
+          { t: '微软 · 生成式 AI 入门课程（中文）', u: 'https://microsoft.github.io/generative-ai-for-beginners/' }
+        ]
+      }
+    ]
   }
 ];
+
+/* ============================================================
+   AI 实践 —— 技术栈里的 AI 主线
+   tracks：能力方向（level 决定色带与能力刻度；levels 是等级 → 刻度映射）
+   matchTags / matchRe：用来从博客清单里自动挑出「实践产出」，
+       命中标签或标题即可，所以以后把新文章打上 AI 相关标签，这里会自动出现
+   ============================================================ */
+window.AI_DATA = {
+  note: '技术栈新增方向 · 边学边做，产出都沉淀在本站',
+  levels: { '已落地': 5, '实践中': 4, '学习中': 2, '规划中': 1 },
+  matchTags: ['AI大模型', 'AI', '大模型', 'LLM', 'Agent', 'RAG'],
+  matchRe: 'AI|大模型|LLM|智能体',
+  tracks: [
+    {
+      icon: '🧠', name: '大模型基础与 API', level: '已落地',
+      desc: '主流大模型的 API 接入、Token 与上下文成本、流式输出、结构化 JSON 返回，以及多轮会话的状态管理。',
+      tools: ['DeepSeek', '通义千问', '混元', 'GLM']
+    },
+    {
+      icon: '✍️', name: 'Prompt 与上下文工程', level: '已落地',
+      desc: '角色与约束设定、少样本示例、思维链拆解、输出格式强约束、长文档分段摘要与要点抽取。',
+      tools: ['Few-shot', 'CoT', '结构化输出']
+    },
+    {
+      icon: '📚', name: 'RAG 知识库', level: '实践中',
+      desc: '文档解析 → 分块 → 向量化 → 混合检索 → 重排 → 引用溯源，把私有资料变成能追问的知识库。',
+      tools: ['LangChain', 'Chroma', 'FastGPT']
+    },
+    {
+      icon: '🕹️', name: 'Agent 与工具调用', level: '实践中',
+      desc: '函数调用与多步规划、用 MCP 协议把本地工具接给模型、流程编排，以及关键步骤的人工兜底。',
+      tools: ['MCP', 'LangGraph', 'Dify']
+    },
+    {
+      icon: '🚀', name: '本地部署与推理', level: '学习中',
+      desc: '量化模型本地跑通、推理加速与显存占用、并发与吞吐调优，让中小模型在自己机器上也能用。',
+      tools: ['Ollama', 'vLLM', 'Qwen']
+    },
+    {
+      icon: '🛡️', name: 'AI 工程化落地', level: '规划中',
+      desc: '评测集与回归、成本与限额控制、数据边界与权限审计，把 AI 稳定地嵌进日常运维流程。',
+      tools: ['评测集', '灰度', '审计']
+    }
+  ]
+};

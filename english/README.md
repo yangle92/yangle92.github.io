@@ -4,7 +4,12 @@
 
 ## 在线访问
 
-**https://yangle92.github.io/english/**
+| 站点 | 地址 |
+| --- | --- |
+| 🏠 个人主页（含博客） | **https://yangle92.github.io/** |
+| 🎈 英语应用 | **https://yangle92.github.io/english/** |
+
+> 个人主页由本仓库的 `homepage/` 目录构建，博客文章来自本机的 `BLog` 文件夹（见下方「博客同步」）。
 
 ## 主要功能
 
@@ -49,10 +54,26 @@ Windows 用户可直接双击 `启动服务器.bat`。
 │   ├── data-grammar.js     语法库
 │   └── data-quiz.js        题库
 ├── server.py               本地服务器（静态托管 + 账号/进度 REST 接口）
-├── 启动服务器.bat           Windows 一键启动
+├── sync-to-github.py       一键同步脚本（扫描 BLog + 发布 GitHub Pages）
+├── 启动服务器.bat           Windows 一键启动本地服务
+├── 发布到GitHub.bat         Windows 一键发布到 GitHub Pages
 ├── 安装英文语音包.bat       Windows 补装英文系统语音
+├── homepage/               个人主页源码（发布到 github.io 根目录）
+│   ├── index.html          主页
+│   ├── assets/             样式、交互逻辑、笔记索引数据
+│   └── blog/               博客文章（由本机 BLog 文件夹自动同步）
 └── 使用与运维手册.md        完整使用与运维文档
 ```
+
+## 博客同步
+
+个人主页的「博客文章」区块会自动读取本机 `C:\Users\yangle\Desktop\BLog` 文件夹：
+
+1. 在该文件夹里新建 `.md` 文件（可建子文件夹，文件夹名会自动成为标签）
+2. 双击 `发布到GitHub.bat`（或执行 `python sync-to-github.py`）
+
+1~2 分钟后文章自动出现在主页上。文件头部可选写 `title` / `date` / `tags` / `summary`，
+不写则自动从正文标题、文件修改时间、子文件夹名推断。
 
 ## 部署说明
 

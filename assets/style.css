@@ -634,10 +634,14 @@ html[data-theme="dark"] .b3  { opacity: .16; }
 .note-link:hover .ext { opacity: .7; }
 
 /* ---------- 10. 关于 & 快捷链接 ---------- */
+/* 三张信息卡排满一行（auto-fit 在 1120 容器下只会排出 3 列，
+   第四张卡会掉到第二行独占一格、右侧留大片空洞），
+   故显式三列，并让「找到我」横跨整行，与上方三卡一一对齐 */
 .about-grid {
   display: grid; gap: 17px;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
 }
+.about-card--links { grid-column: 1 / -1; }
 .about-card {
   padding: 24px; border-radius: var(--r-lg);
   background: var(--surface); border: 1px solid var(--border);
@@ -652,13 +656,15 @@ html[data-theme="dark"] .b3  { opacity: .16; }
   background: linear-gradient(var(--primary), var(--primary-2));
 }
 .about-card p { margin: 0; font-size: 14px; color: var(--text-soft); }
-.quick-links { display: flex; flex-direction: column; gap: 8px; }
+/* 联系条横排三等分：每格是一块等宽联系块，与上方三张卡同频 */
+.quick-links { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
 .quick-links a {
   display: flex; align-items: center; gap: 12px;
   padding: 10px 12px; border-radius: var(--r-sm);
+  background: var(--bg-soft);
   transition: background .2s var(--ease), transform .2s var(--ease);
 }
-.quick-links a:hover { background: var(--bg-soft); transform: translateX(4px); }
+.quick-links a:hover { background: var(--primary-soft); transform: translateY(-2px); }
 .ql-ico {
   width: 38px; height: 38px; border-radius: 11px; flex: none;
   display: grid; place-items: center; font-size: 12px; font-weight: 800;
@@ -667,7 +673,10 @@ html[data-theme="dark"] .b3  { opacity: .16; }
 }
 .ql-txt { display: flex; flex-direction: column; line-height: 1.35; min-width: 0; }
 .ql-txt b { font-size: 14px; font-weight: 700; }
-.ql-txt i { font-style: normal; font-size: 12px; color: var(--text-faint); }
+.ql-txt i {
+  font-style: normal; font-size: 12px; color: var(--text-faint);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
 
 /* ---------- 11. 空态 / 加载 ---------- */
 .empty {
@@ -864,6 +873,17 @@ html[data-theme="dark"] .markdown pre { background: #10121E; }
 }
 
 /* ---------- 15. 响应式 ---------- */
+@media (max-width: 1000px) {
+  /* 两列：四张卡按 2×2 排满，避免出现"半行空洞"。
+     联系条回到普通格子，内部三格收窄（只留平台名），
+     高度贴近同排的信息卡，不再拖出一条空白 */
+  .about-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .about-card--links { grid-column: auto; }
+  .quick-links { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+  .quick-links a { padding: 8px; gap: 8px; }
+  .ql-ico { width: 32px; height: 32px; border-radius: 9px; font-size: 11px; }
+  .ql-txt i { display: none; }
+}
 @media (max-width: 860px) {
   .nav-links { display: none; }
   .nav-inner { gap: 12px; }
@@ -875,6 +895,13 @@ html[data-theme="dark"] .markdown pre { background: #10121E; }
   .reader-scroll { padding: 28px 22px 60px; }
   .toolbar { gap: 10px; }
   .search { max-width: 100%; flex-basis: 100%; }
+}
+@media (max-width: 720px) {
+  /* 单列：卡片纵向堆叠互不影响，联系条回到竖排列表并还原尺寸与网址 */
+  .about-grid, .quick-links { grid-template-columns: 1fr; }
+  .quick-links a { padding: 10px 12px; gap: 12px; }
+  .ql-ico { width: 38px; height: 38px; border-radius: 11px; font-size: 12px; }
+  .ql-txt i { display: block; }
 }
 @media (max-width: 480px) {
   .brand-text i { display: none; }

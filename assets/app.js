@@ -470,6 +470,8 @@
     var emptyText = $('#blogEmptyText');
     var loading = $('#blogLoading');
     if (!grid) return;
+    // 加载动画默认隐藏（无 JS 时不会一直转），由脚本在开始拉取时显示
+    if (loading) loading.hidden = false;
 
     var curTag = '*';
 

@@ -126,7 +126,14 @@
       <b>还没有匹配的文章</b>
       <p id="blogEmptyText">把写好 Markdown 放进电脑上的 <code>BLog</code> 文件夹，运行一次同步脚本即可自动出现在这里。</p>
     </div>
-    <div class="loading" id="blogLoading"><span></span><span></span><span></span></div>
+    <div class="loading" id="blogLoading" hidden><span></span><span></span><span></span></div>
+    <noscript>
+      <div class="empty">
+        <span class="empty-ico">⚠️</span>
+        <b>浏览器禁用了 JavaScript</b>
+        <p>本站的文章列表与笔记索引需要 JavaScript 才能渲染，请在浏览器设置中开启。</p>
+      </div>
+    </noscript>
   </section>
 
   <!-- ============ 技术笔记索引 ============ -->
@@ -150,6 +157,13 @@
       <b>没有找到匹配的笔记</b>
       <p>换个关键词试试，或点上面的分类标签查看全部。</p>
     </div>
+    <noscript>
+      <div class="empty">
+        <span class="empty-ico">⚠️</span>
+        <b>浏览器禁用了 JavaScript</b>
+        <p>技术笔记索引由脚本渲染，请在浏览器设置中开启 JavaScript 后刷新。</p>
+      </div>
+    </noscript>
   </section>
 
   <!-- ============ 关于 ============ -->

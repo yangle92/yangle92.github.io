@@ -442,23 +442,71 @@
      ============================================================ */
   var POSTS = [];
 
+  var CAL_SVG = '<svg viewBox="0 0 24 24" aria-hidden="true">' +
+      '<rect x="3.5" y="5" width="17" height="15.5" rx="2.5" fill="none" stroke-width="1.8"/>' +
+      '<path d="M3.5 10h17M8 3.2v3.4M16 3.2v3.4" fill="none" stroke-width="1.8" stroke-linecap="round"/>' +
+    '</svg>';
+
+  var FILE_SVG = '<svg viewBox="0 0 24 24" aria-hidden="true">' +
+      '<path d="M13.6 2.8H6.5a1.5 1.5 0 0 0-1.5 1.5v15.4a1.5 1.5 0 0 0 1.5 1.5h11a1.5 1.5 0 0 0 1.5-1.5V8.2z" ' +
+        'fill="none" stroke-width="1.7" stroke-linejoin="round"/>' +
+      '<path d="M13.6 2.8v5.4H19" fill="none" stroke-width="1.7" stroke-linejoin="round"/>' +
+    '</svg>';
+
+  var DL_SVG = '<svg viewBox="0 0 24 24" aria-hidden="true">' +
+      '<path d="M12 3.5v11M7.5 10.5l4.5 4.5 4.5-4.5" fill="none" stroke-width="1.9" ' +
+        'stroke-linecap="round" stroke-linejoin="round"/>' +
+      '<path d="M4.5 19.5h15" fill="none" stroke-width="1.9" stroke-linecap="round"/>' +
+    '</svg>';
+
+  // 资料卡片（BLog 里的 PPT / PDF / Word / Excel 等文档）
+  function isFile(p) { return !!p && p.kind === 'file'; }
+
+  function tagsHtml(tags) {
+    if (!tags || !tags.length) return '';
+    return '<span class="post-tags">' + tags.map(function (t) {
+      return '<span>' + esc(t) + '</span>';
+    }).join('') + '</span>';
+  }
+
+  function fileBits(p) {
+    var bits = [];
+    if (p.fileKind) bits.push(p.fileKind);
+    if (p.pageCount) bits.push('共 ' + p.pageCount + ' 页');
+    if (p.fileSizeText) bits.push(p.fileSizeText);
+    return bits;
+  }
+
   function postCardHtml(p, i) {
-    var tags = (p.tags || []).map(function (t) { return '<span>' + esc(t) + '</span>'; }).join('');
-    return '<a class="post-card" href="#/post/' + encodeURIComponent(p.slug) + '" ' +
-      'data-slug="' + esc(p.slug) + '" style="animation-delay:' + Math.min(i * 45, 400) + 'ms">' +
-      '<span class="post-card-top">' +
-        '<span class="post-date">' +
-          '<svg viewBox="0 0 24 24" aria-hidden="true">' +
-            '<rect x="3.5" y="5" width="17" height="15.5" rx="2.5" fill="none" stroke-width="1.8"/>' +
-            '<path d="M3.5 10h17M8 3.2v3.4M16 3.2v3.4" fill="none" stroke-width="1.8" stroke-linecap="round"/>' +
-          '</svg>' + fmtDate(p.date) +
+    var style = 'animation-delay:' + Math.min(i * 45, 400) + 'ms';
+    var head = '<span class="post-date">' + CAL_SVG + fmtDate(p.date) + '</span>' +
+               '<span class="post-dot"></span>';
+
+    if (isFile(p)) {
+      var short = [];
+      if (p.pageCount) short.push('共 ' + p.pageCount + ' 页');
+      else if (p.fileLabel) short.push(p.fileLabel);
+      if (p.fileSizeText) short.push(p.fileSizeText);
+      return '<a class="post-card post-card--file" href="#/post/' + encodeURIComponent(p.slug) +
+        '" data-slug="' + esc(p.slug) + '" style="' + style + '">' +
+        '<span class="post-card-top">' + head +
+          '<span class="post-read">' + esc(short.join(' · ')) + '</span>' +
+          '<span class="file-badge">' + esc(p.fileLabel || 'FILE') + '</span>' +
         '</span>' +
-        '<span class="post-dot"></span>' +
+        '<h3>' + esc(p.title) + '</h3>' +
+        (p.summary ? '<p>' + esc(p.summary) + '</p>' : '') +
+        tagsHtml(p.tags) +
+      '</a>';
+    }
+
+    return '<a class="post-card" href="#/post/' + encodeURIComponent(p.slug) +
+      '" data-slug="' + esc(p.slug) + '" style="' + style + '">' +
+      '<span class="post-card-top">' + head +
         '<span class="post-read">' + (p.readingMinutes || 1) + ' 分钟读完</span>' +
       '</span>' +
       '<h3>' + esc(p.title) + '</h3>' +
       (p.summary ? '<p>' + esc(p.summary) + '</p>' : '') +
-      (tags ? '<span class="post-tags">' + tags + '</span>' : '') +
+      tagsHtml(p.tags) +
     '</a>';
   }
 
@@ -555,6 +603,66 @@
   var reader = null;
   var savedScrollY = 0;
 
+  function filePanelHtml(p) {
+    var href = encodePath(p.path);
+    var abs = href;
+    try { abs = new URL(href, window.location.href).href; } catch (e) { abs = href; }
+
+    var label = (p.fileLabel || '').toUpperCase();
+    var previewHref = '';
+    if (label === 'PDF') {
+      previewHref = href;                                  // PDF 浏览器可原生预览
+    } else if (/^(PPT|PPTX|DOC|DOCX|XLS|XLSX)$/.test(label)) {
+      previewHref = 'https://view.officeapps.live.com/op/view.aspx?src=' +
+                    encodeURIComponent(abs);               // Office 在线预览
+    }
+
+    var groups = [];
+    (p.outline || []).forEach(function (it) {
+      var sec = it.section || '';
+      var last = groups[groups.length - 1];
+      if (!last || last.section !== sec) {
+        last = { section: sec, items: [] };
+        groups.push(last);
+      }
+      last.items.push(it);
+    });
+
+    var rows = groups.map(function (g) {
+      return '<div class="file-outline-group">' +
+        (g.section ? '<h4>' + esc(g.section) + '</h4>' : '') +
+        '<ul class="file-outline-list">' +
+        g.items.map(function (it) {
+          return '<li><span class="file-outline-n">p' + esc(String(it.n)) + '</span>' +
+                 '<span>' + esc(it.text) + '</span></li>';
+        }).join('') +
+        '</ul></div>';
+    }).join('');
+
+    var info = fileBits(p).join(' · ');
+    return '<div class="file-panel">' +
+        '<div class="file-brief">' +
+          '<span class="file-icon">' + FILE_SVG + '</span>' +
+          '<div class="file-brief-text">' +
+            '<strong>' + esc(p.fileName || p.title) + '</strong>' +
+            '<span>' + esc(info) + '</span>' +
+          '</div>' +
+        '</div>' +
+        '<div class="file-actions">' +
+          '<a class="btn btn-primary" href="' + esc(href) + '" download>' +
+            DL_SVG + '下载文件</a>' +
+          (previewHref
+            ? '<a class="btn btn-ghost" href="' + esc(previewHref) +
+              '" target="_blank" rel="noopener">在线预览</a>'
+            : '') +
+        '</div>' +
+        (rows
+          ? '<h2 class="file-outline-title">' + esc(p.outlineLabel || '内容大纲') + '</h2>' +
+            '<div class="file-outline">' + rows + '</div>'
+          : '<p class="md-empty">这份资料没有可自动提取的文字大纲，下载后用本地软件打开即可。</p>') +
+      '</div>';
+  }
+
   function findPost(slug) {
     for (var i = 0; i < POSTS.length; i++) if (POSTS[i].slug === slug) return POSTS[i];
     return null;
@@ -580,11 +688,15 @@
     $('#readerMeta').innerHTML =
       '<span class="post-date">' + fmtDate(p.date) + '</span>' +
       '<span class="post-dot"></span>' +
-      '<span class="post-read">' + (p.readingMinutes || 1) + ' 分钟读完</span>' +
-      ((p.tags || []).length
-        ? '<span class="post-tags">' +
-          p.tags.map(function (t) { return '<span>' + esc(t) + '</span>'; }).join('') + '</span>'
-        : '');
+      '<span class="post-read">' +
+        (isFile(p) ? esc(fileBits(p).join(' · ')) : (p.readingMinutes || 1) + ' 分钟读完') +
+      '</span>' + tagsHtml(p.tags);
+
+    if (isFile(p)) {
+      $('#readerBody').innerHTML = filePanelHtml(p);
+      return;
+    }
+
     $('#readerBody').innerHTML = '<p class="md-empty">正在加载正文…</p>';
 
     fetch(encodePath(p.path) + '?t=' + Date.now(), { cache: 'no-store' })

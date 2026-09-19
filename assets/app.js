@@ -134,7 +134,8 @@
         if (/^-+:$/.test(c))  return 'right';
         return 'left';
       });
-      var html = '<table><thead><tr>';
+      // 外面包一层滚动容器：窄屏下表格宁可横向滑动，也不要把列挤成竖排单字
+      var html = '<div class="md-table"><table><thead><tr>';
       cells(head).forEach(function (c, i) {
         html += '<th style="text-align:' + (aligns[i] || 'left') + '">' + c + '</th>';
       });
@@ -146,7 +147,7 @@
         });
         html += '</tr>';
       });
-      return html + '</tbody></table>';
+      return html + '</tbody></table></div>';
     }
 
     /* ---- 列表（支持一级嵌套） ---- */
@@ -716,6 +717,7 @@
      ============================================================ */
   var reader = null;
   var savedScrollY = 0;
+  var lastFocus = null;                                              // 关闭浮层后把焦点还给入口
 
   function filePanelHtml(p) {
     var href = encodePath(p.path);
@@ -777,6 +779,68 @@
       '</div>';
   }
 
+  /* 侧栏目录：从正文顶层 h2 / h3 抽取。
+     章节少于 3 个（短文章、资料卡片、加载失败）就不显示 ——
+     宁可不给导航，也不要在侧栏留一列空壳 */
+  var tocLinks = [];
+
+  function buildToc() {
+    var scroll = $('#readerScroll');
+    var body = $('#readerBody');
+    var toc = $('#readerToc');
+    var list = $('#readerTocList');
+    tocLinks = [];
+    if (!scroll || !body || !toc || !list) return;
+
+    var hs = [];
+    for (var i = 0; i < body.children.length; i++) {
+      var tag = body.children[i].tagName;
+      if (tag === 'H2' || tag === 'H3') hs.push(body.children[i]);
+    }
+    if (hs.length < 3) {
+      toc.hidden = true;
+      list.innerHTML = '';
+      scroll.classList.remove('reader-scroll--toc');
+      return;
+    }
+
+    var html = '';
+    hs.forEach(function (el, i) {
+      var id = 'sec-' + i;
+      var sub = el.tagName === 'H3';
+      el.id = id;
+      tocLinks.push({ el: el });
+      html += '<a href="#' + id + '" data-toc="' + id + '"' +
+              (sub ? ' class="is-sub"' : '') + '>' + esc(el.textContent) + '</a>';
+    });
+    list.innerHTML = html;
+    toc.hidden = false;
+    scroll.classList.add('reader-scroll--toc');
+    markToc();
+  }
+
+  /* 滚动时高亮当前章节：以滚动区顶部下方 110px 为基准线 */
+  function markToc() {
+    var scroll = $('#readerScroll');
+    var list = $('#readerTocList');
+    if (!scroll || !list || !tocLinks.length) return;
+
+    var base = scroll.getBoundingClientRect().top + 110;
+    var cur = 0;
+    for (var i = 0; i < tocLinks.length; i++) {
+      if (tocLinks[i].el.getBoundingClientRect().top <= base) cur = i;
+      else break;
+    }
+    if (scroll.scrollTop + scroll.clientHeight >= scroll.scrollHeight - 4) {
+      cur = tocLinks.length - 1;                      // 触底时高亮末章
+    }
+    var links = list.children;
+    for (var j = 0; j < links.length; j++) {
+      if (j === cur) links[j].classList.add('on');
+      else links[j].classList.remove('on');
+    }
+  }
+
   function findPost(slug) {
     for (var i = 0; i < POSTS.length; i++) if (POSTS[i].slug === slug) return POSTS[i];
     return null;
@@ -788,15 +852,27 @@
     if (!reader.hidden && reader.dataset.slug === slug) return;   // 幂等
 
     savedScrollY = window.scrollY || 0;
+    lastFocus = document.activeElement;
     reader.dataset.slug = slug;
     reader.hidden = false;
     document.body.classList.add('no-scroll');
     if (!skipHash) history.replaceState(null, '', '#/post/' + encodeURIComponent(slug));
 
+    // 焦点移入浮层（键盘用户 Tab 从浮层内部开始），关闭时再还回去
+    var back = reader.querySelector('.reader-bar [data-close]');
+    if (back && back.focus) back.focus();
+
     var scroll = $('#readerScroll');
     if (scroll) scroll.scrollTop = 0;
     var bar = $('#readProgress');
     if (bar) bar.style.width = '0%';
+
+    var barTitle = $('#readerBarTitle');
+    if (barTitle) barTitle.textContent = p.title;
+    var content = reader.querySelector('.reader-content');
+    if (content) content.classList.toggle('is-file', isFile(p));   // 资料浮层标题不限宽，与资料卡对齐
+    var readerBar = reader.querySelector('.reader-bar');
+    if (readerBar) readerBar.classList.remove('is-scrolled');
 
     $('#readerTitle').textContent = p.title;
     $('#readerMeta').innerHTML =
@@ -809,19 +885,23 @@
 
     if (isFile(p)) {
       $('#readerBody').innerHTML = filePanelHtml(p);
+      buildToc();
       return;
     }
 
     $('#readerBody').innerHTML = '<p class="md-empty">正在加载正文…</p>';
+    buildToc();                                    // 先清掉上一篇的目录，避免串味
 
     fetch(encodePath(p.path) + '?t=' + Date.now(), { cache: 'no-store' })
       .then(function (r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.text(); })
       .then(function (txt) {
         if (reader.dataset.slug !== slug) return;
         $('#readerBody').innerHTML = MD.render(txt);
+        buildToc();
       })
       .catch(function () {
         if (reader.dataset.slug !== slug) return;
+        buildToc();
         $('#readerBody').innerHTML =
           '<p class="md-empty">正文加载失败。<br>' +
           '如果正在本地直接双击 HTML 打开（file:// 协议），浏览器出于安全限制不允许读取本地文件，' +
@@ -835,6 +915,9 @@
     reader.dataset.slug = '';
     document.body.classList.remove('no-scroll');
     history.replaceState(null, '', window.location.pathname + window.location.search);
+    // 焦点还给打开浮层的元素（键盘用户不会掉到页首）
+    if (lastFocus && lastFocus.focus) { try { lastFocus.focus(); } catch (e) { /* 元素已移除 */ } }
+    lastFocus = null;
     window.scrollTo(0, savedScrollY);
   }
 
@@ -868,11 +951,26 @@
 
     var scroll = $('#readerScroll');
     var bar = $('#readProgress');
+    var barWrap = reader.querySelector('.reader-bar');
     if (scroll && bar) {
       scroll.addEventListener('scroll', function () {
         var max = scroll.scrollHeight - scroll.clientHeight;
         bar.style.width = (max > 0 ? (scroll.scrollTop / max) * 100 : 0) + '%';
+        if (barWrap) barWrap.classList.toggle('is-scrolled', scroll.scrollTop > 120);
+        markToc();
       }, { passive: true });
+    }
+
+    // 目录点击跳转（目录项是动态生成的，所以监听挂在容器上）
+    var tocList = $('#readerTocList');
+    if (tocList) {
+      tocList.addEventListener('click', function (e) {
+        var a = e.target && e.target.closest ? e.target.closest('a[data-toc]') : null;
+        if (!a) return;
+        e.preventDefault();
+        var el = document.getElementById(a.getAttribute('data-toc'));
+        if (el && el.scrollIntoView) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
     }
 
     // 支持直接用 #/post/xxx 打开（等清单加载完再试）

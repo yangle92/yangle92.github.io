@@ -1,9 +1,26 @@
 {
   "site": "Yangle",
-  "generated": "2026-09-19 12:24:52",
+  "generated": "2026-09-19 15:48:01",
   "source": "C:\\Users\\yangle\\Desktop\\BLog",
-  "count": 4,
+  "count": 5,
   "posts": [
+    {
+      "slug": "大模型开发实战全书（整合版）",
+      "title": "大模型开发实战全书",
+      "date": "2026-09-19",
+      "tags": [
+        "AI大模型",
+        "大模型",
+        "学习路线",
+        "工程实践"
+      ],
+      "summary": "面向零基础到大模型工程落地的一站式实战手册：从原理与术语讲起，经全流程与数据结构、调优手段与实操，直至进阶架构、Scaling、成本与安全，全书 4 篇 45 章 + 6 个附录。",
+      "readingMinutes": 122,
+      "path": "blog/src/大模型开发实战全书（整合版）.md",
+      "source": "大模型开发实战全书（整合版）.md",
+      "pinned": true,
+      "pinOrder": 10
+    },
     {
       "slug": "欢迎来到我的博客",
       "title": "欢迎来到我的博客",

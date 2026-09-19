@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Yangle 的个人主页 —— 运维 / 云原生 / 自动化技术笔记索引，以及在线小应用。">
+<meta name="theme-color" content="#5B5BD6">
+<title>Yangle · 技术笔记与在线应用</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='24' fill='%235B5BD6'/%3E%3Ctext x='50' y='70' font-size='58' font-family='sans-serif' font-weight='bold' fill='white' text-anchor='middle'%3EY%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+
+<!-- ============ 顶部导航 ============ -->
+<header class="nav" id="nav">
+  <div class="nav-inner">
+    <a class="brand" href="#top">
+      <span class="brand-mark">Y</span>
+      <span class="brand-text">
+        <b>Yangle</b>
+        <i>运维 · 云原生 · 自动化</i>
+      </span>
+    </a>
+    <nav class="nav-links">
+      <a href="#apps">在线应用</a>
+      <a href="#blog">博客</a>
+      <a href="#notes">技术索引</a>
+      <a href="#about">关于</a>
+    </nav>
+    <button class="icon-btn" id="themeBtn" type="button" title="切换深色 / 浅色" aria-label="切换主题">
+      <svg class="ico-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><g stroke-linecap="round"><path d="M12 2.6v2.6M12 18.8v2.6M2.6 12h2.6M18.8 12h2.6M5.4 5.4l1.8 1.8M16.8 16.8l1.8 1.8M18.6 5.4l-1.8 1.8M7.2 16.8l-1.8 1.8"/></g></svg>
+      <svg class="ico-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 14.6A8.6 8.6 0 0 1 9.4 3.5a8.6 8.6 0 1 0 11.1 11.1Z"/></svg>
+    </button>
+  </div>
+</header>
+
+<main id="top">
+
+  <!-- ============ Hero ============ -->
+  <section class="hero">
+    <div class="hero-bg" aria-hidden="true">
+      <span class="blob b1"></span>
+      <span class="blob b2"></span>
+      <span class="blob b3"></span>
+      <span class="grid-mask"></span>
+    </div>
+    <div class="hero-inner">
+      <div class="avatar" aria-hidden="true">
+        <span>Y</span>
+        <i class="ring"></i>
+      </div>
+      <h1>Hi，我是 <em>Yangle</em></h1>
+      <p class="tagline">十年一线 IT 基础架构 · 把踩过的坑写成笔记</p>
+      <p class="hero-desc">
+        这里汇总了我历年的技术沉淀：<b>Linux 系统</b>、<b>云原生</b>、<b>数据库</b>、
+        <b>自动化与监控</b>，以及我自己写的小应用。持续更新，欢迎自取。
+      </p>
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="#blog">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16v14H4z" fill="none" stroke-width="1.8"/><path d="M8 9h8M8 13h5" stroke-width="1.8" stroke-linecap="round"/></svg>
+          阅读博客
+        </a>
+        <a class="btn btn-ghost" href="english/" data-app-link>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="none" stroke-width="1.8"/><path d="M3.5 12h17M12 3.2c2.6 2.4 2.6 15.2 0 17.6M12 3.2c-2.6 2.4-2.6 15.2 0 17.6" fill="none" stroke-width="1.6"/></svg>
+          快乐英语乐园
+        </a>
+      </div>
+      <ul class="stats" id="stats">
+        <li><b data-stat="notes">—</b><span>技术笔记</span></li>
+        <li><b data-stat="cats">—</b><span>知识分类</span></li>
+        <li><b data-stat="posts">—</b><span>博客文章</span></li>
+        <li><b data-stat="apps">1</b><span>在线应用</span></li>
+      </ul>
+    </div>
+    <a class="scroll-cue" href="#apps" aria-label="向下滚动"><span></span></a>
+  </section>
+
+  <!-- ============ 在线应用 ============ -->
+  <section class="section" id="apps">
+    <div class="sec-head">
+      <h2 class="sec-title"><span class="dot"></span>在线应用</h2>
+      <p class="sec-note">自己动手写的小工具，打开即用</p>
+    </div>
+    <div class="app-grid">
+      <a class="app-card" href="english/">
+        <div class="app-card-top">
+          <span class="app-icon" style="--c1:#6366F1;--c2:#8B5CF6">🎈</span>
+          <span class="app-badge">在线运行</span>
+        </div>
+        <h3>快乐英语乐园</h3>
+        <p>面向小学三到六年级的英语学习系统：单词卡片、语法专题、趣味练习、单词拼写，支持系统语音与在线双引擎朗读。</p>
+        <div class="app-tags">
+          <span>小学英语</span><span>自然拼读</span><span>语音朗读</span><span>拼写练习</span>
+        </div>
+        <span class="app-go">进入应用
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h13M12.5 5.5 19 12l-6.5 6.5" fill="none" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </span>
+      </a>
+      <div class="app-card app-card--more">
+        <div class="app-card-top"><span class="app-icon" style="--c1:#94A3B8;--c2:#CBD5E1">＋</span></div>
+        <h3>敬请期待</h3>
+        <p>这里还会放更多自研小应用。有想法欢迎邮件告诉我。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 博客（自动同步） ============ -->
+  <section class="section" id="blog">
+    <div class="sec-head">
+      <h2 class="sec-title"><span class="dot"></span>博客文章</h2>
+      <p class="sec-note">自动读取本地 <code>BLog</code> 文件夹，写完同步即上线</p>
+    </div>
+
+    <div class="toolbar">
+      <label class="search">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.4" fill="none" stroke-width="1.9"/><path d="m16 16 4.2 4.2" stroke-width="1.9" stroke-linecap="round"/></svg>
+        <input type="search" id="blogSearch" placeholder="搜索文章标题、标签或摘要…" autocomplete="off">
+      </label>
+      <div class="chips" id="blogTags"></div>
+    </div>
+
+    <div class="blog-grid" id="blogGrid"></div>
+
+    <div class="empty" id="blogEmpty" hidden>
+      <span class="empty-ico">📭</span>
+      <b>还没有匹配的文章</b>
+      <p id="blogEmptyText">把写好 Markdown 放进电脑上的 <code>BLog</code> 文件夹，运行一次同步脚本即可自动出现在这里。</p>
+    </div>
+    <div class="loading" id="blogLoading"><span></span><span></span><span></span></div>
+  </section>
+
+  <!-- ============ 技术笔记索引 ============ -->
+  <section class="section" id="notes">
+    <div class="sec-head">
+      <h2 class="sec-title"><span class="dot"></span>技术笔记索引</h2>
+      <p class="sec-note">历史沉淀 · 按主题分类，点击直达原文</p>
+    </div>
+
+    <div class="toolbar">
+      <label class="search">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.4" fill="none" stroke-width="1.9"/><path d="m16 16 4.2 4.2" stroke-width="1.9" stroke-linecap="round"/></svg>
+        <input type="search" id="notesSearch" placeholder="搜索笔记标题，例如 Nginx / Redis / 索引…" autocomplete="off">
+      </label>
+      <div class="chips" id="notesChips"></div>
+    </div>
+
+    <div class="notes-grid" id="notesGrid"></div>
+    <div class="empty" id="notesEmpty" hidden>
+      <span class="empty-ico">🔍</span>
+      <b>没有找到匹配的笔记</b>
+      <p>换个关键词试试，或点上面的分类标签查看全部。</p>
+    </div>
+  </section>
+
+  <!-- ============ 关于 ============ -->
+  <section class="section" id="about">
+    <div class="sec-head">
+      <h2 class="sec-title"><span class="dot"></span>关于 & 联系</h2>
+    </div>
+    <div class="about-grid">
+      <div class="about-card">
+        <h3>技术领域</h3>
+        <p>操作系统与内核、云原生（K8s / Docker）、网络与负载均衡、数据库（MySQL / Redis / Oracle）、自动化（Ansible / SaltStack）、监控（Prometheus / Zabbix）、Python 开发。</p>
+      </div>
+      <div class="about-card">
+        <h3>通用能力</h3>
+        <p>PMP 项目管理、ITIL 服务管理框架、团队协作与效率方法。技术之外也喜欢读书、运动与长期主义。</p>
+      </div>
+      <div class="about-card about-card--links">
+        <h3>找到我</h3>
+        <div class="quick-links">
+          <a href="https://blog.csdn.net/yolo2016?type=blog" target="_blank" rel="noopener">
+            <span class="ql-ico" style="--c:#FC5531">CSDN</span>
+            <span class="ql-txt"><b>博客专栏</b><i>blog.csdn.net/yolo2016</i></span>
+          </a>
+          <a href="https://github.com/yangle92" target="_blank" rel="noopener">
+            <span class="ql-ico" style="--c:#24292F">GH</span>
+            <span class="ql-txt"><b>GitHub</b><i>github.com/yangle92</i></span>
+          </a>
+          <a href="https://gitee.com/yangle92" target="_blank" rel="noopener">
+            <span class="ql-ico" style="--c:#C71D23">GE</span>
+            <span class="ql-txt"><b>Gitee</b><i>gitee.com/yangle92</i></span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="footer">
+  <div class="footer-inner">
+    <p>© <span id="year">2026</span> Yangle · 用 HTML &amp; CSS 手写，托管于 GitHub Pages</p>
+    <p class="footer-sub">本站所有笔记均为个人学习记录，欢迎交流指正。</p>
+  </div>
+</footer>
+
+<!-- ============ 文章阅读浮层 ============ -->
+<div class="reader" id="reader" hidden>
+  <div class="reader-backdrop" data-close></div>
+  <article class="reader-panel" role="dialog" aria-modal="true" aria-label="文章阅读">
+    <div class="reader-bar">
+      <button class="icon-btn" data-close type="button" aria-label="返回">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H6M11.5 6 5.5 12l6 6" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <div class="reader-bar-tools">
+        <span class="progress" aria-hidden="true"><i id="readProgress"></i></span>
+        <button class="ghost-btn" id="copyLinkBtn" type="button">复制链接</button>
+      </div>
+    </div>
+    <div class="reader-scroll" id="readerScroll">
+      <header class="reader-head">
+        <h1 id="readerTitle"></h1>
+        <div class="reader-meta" id="readerMeta"></div>
+      </header>
+      <div class="markdown" id="readerBody"></div>
+      <div class="reader-foot">
+        <button class="btn btn-ghost" data-close type="button">← 返回首页</button>
+      </div>
+    </div>
+  </article>
+</div>
+
+<script src="assets/blog-data.js"></script>
+<script src="assets/app.js"></script>
+</body>
+</html>

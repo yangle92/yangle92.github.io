@@ -1,0 +1,33 @@
+{
+  "site": "Yangle",
+  "generated": "2026-09-19 08:53:24",
+  "source": "C:\\Users\\yangle\\Desktop\\BLog",
+  "count": 2,
+  "posts": [
+    {
+      "slug": "欢迎来到我的博客",
+      "title": "欢迎来到我的博客",
+      "date": "2026-09-19",
+      "tags": [
+        "公告",
+        "使用说明"
+      ],
+      "summary": "博客正式上线。这里说明文章自动同步机制——把 Markdown 丢进本机 BLog 文件夹，运行一次同步脚本，就会出现在首页。",
+      "readingMinutes": 2,
+      "path": "blog/src/欢迎来到我的博客.md",
+      "source": "欢迎来到我的博客.md"
+    },
+    {
+      "slug": "test",
+      "title": "test",
+      "date": "2026-09-19",
+      "tags": [
+        "随笔"
+      ],
+      "summary": "这个一个测试",
+      "readingMinutes": 1,
+      "path": "blog/src/test.md",
+      "source": "test.md"
+    }
+  ]
+}

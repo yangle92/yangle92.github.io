@@ -1,8 +1,8 @@
 {
   "site": "Yangle",
-  "generated": "2026-09-19 12:06:10",
+  "generated": "2026-09-19 12:24:52",
   "source": "C:\\Users\\yangle\\Desktop\\BLog",
-  "count": 5,
+  "count": 4,
   "posts": [
     {
       "slug": "欢迎来到我的博客",
@@ -18,18 +18,6 @@
       "source": "欢迎来到我的博客.md",
       "pinned": true,
       "pinOrder": 1
-    },
-    {
-      "slug": "test",
-      "title": "test",
-      "date": "2026-09-19",
-      "tags": [
-        "随笔"
-      ],
-      "summary": "这个一个测试",
-      "readingMinutes": 1,
-      "path": "blog/src/test.md",
-      "source": "test.md"
     },
     {
       "slug": "AI大模型应用开发实战路标",
